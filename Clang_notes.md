@@ -41,7 +41,7 @@
 * Main goal of Clang is to provide library based architecture, allows compiler to be more tightly tied to tools that interact with source code, like IDE
 * compiler for C languages only, for other languages LLVM remains dependent on GCC of other compiler front end
 * designed to be highly compatible with GCC
-* Clang can run some benchmarks faster than GCC, though GCC is often still faster compilation speeds
+* Clang can run some benchmarks faster than GCC, though GCC has often still faster compilation speeds
 * compilers are broadly seen as comparable in speed and memory footprint
 
 #### Clang Vs GCC

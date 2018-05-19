@@ -34,31 +34,31 @@
 * supports multiple assignments in one statement
 * function return values can be ignored
 * weakly enforced static typing - all data has type, can perform implicit conversions
-* user defined typedef and compound types are possible
-* structs allow related data to be packaged/assigned together
-* union similar to struct, but total allocated memory is size of largest data member
-* enumerated types available with enum
+* user defined `typedef` and compound types are possible
+* `struct`s allow related data to be packaged/assigned together
+* `union` similar to `struct`, but total allocated memory is size of largest data member
+* enumerated types available with `enum`
 * strings are null terminated arrays of characters
 * procedures are void returning functions
 * preprocessor performs macro definition, source code file inclusion, and conditional compilation
 * modularity - link files together using static and extern attributes
 * i/o, string manipulation, math functions delegated to library routines
-* order of operations can be a little screwy (x & 1 == 0 is not the same as (x & 1) == 0)
+* order of operations can be a little screwy (`x & 1 == 0` is not the same as `(x & 1) == 0`)
 
 #### Operators:
-* bitwise shifts: <<, >>
-* bitwise logic: ~, &, |, ^
-* boolean logic: !, &&, ||
-* member selection: ., ->
-* object size: sizeof
-* reference and dereference: &, \*, [ ]
-* sequencing: ,
-* type conversion: (typename)
+* bitwise shifts: `<<`, `>>`
+* bitwise logic: `~`, `&`, `|`, `^`
+* boolean logic: `!`, `&&`, `||`
+* member selection: `.`, `->`
+* object size: `sizeof`
+* reference and dereference: `&`, `*`, `[ ]`
+* sequencing: `,`
+* type conversion: `(int*)`
 
 #### Pointers:
 * dereference pointers to get value, or to call a function
 * null pointers are 0, dereferencing them gets undefined behavior
-* void pointers (void \*) are generic data type pointers, cant be dereferenced but easily converted to another type of pointer
+* void pointers (`void *`) are generic data type pointers, can't be dereferenced but easily converted to another type of pointer
 
 #### C tools:
 * gdb (debugger)
