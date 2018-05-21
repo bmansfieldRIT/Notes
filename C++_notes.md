@@ -100,7 +100,162 @@ char* p;	// pointer to character
 
 ```C++
 char* p = &v[3];
-char x = \*p;
+char x = *p;
 ```
-* `\*p` is contents of p
+* `*p` is contents of p
 * `&p` is address of p
+
+
+* range-for statement: `for (auto x : v){ // do something }`
+* can be used for any sequence of elements
+* to simply refer to the elements, could do: `for (auto& x : v){ ++x; }`
+* in a declaration, `&` is called a reference, no `*` needed to access value
+* a reference is simply a name that refers to an existing object
+* `void sort(vector<double>& v);` ensures the vector passed in is actually sorted, value is not copied
+* to avoid modifying argument, AND avoid copy cost, use `const`:
+* `double sum(const vector<double>&)`
+* declarator operators: operators used in declarations (`&`, `*`, `[]`)
+
+
+* `nullptr` = no object is available
+* often wise to check that a pointer actually points to something (ie. is not a `nullptr`)
+
+
+* some tests:
+* `while (*p)` = testing for `while (*p != 0)`
+* `while (p)` = testing for `while (p != nullptr)`
+
+
+#### Advice:
+* keep functions short
+* functions should performa single, logical operation
+* avoid all caps names
+* declare one name only per declaration
+* use overloading when functions perform conceptually the same task on different types
+* if a function may have to be evaluated at compile time, use `constexpr`
+* state intent in comments
+* avoid narrowing conversions
+
+## User Defined Types
+
+* builtins: types built from fundemental types, `const`, declarator operators
+* low level, reflect capabilities of hardware
+* C++ provides abstraction mechanisms to build high level facilities
+* classes, enumerations
+
+#### Structures
+
+* first step, organizing elements new type needs into a data structure, `struct`
+
+```C++
+struct Vector {
+    int sz;       // number of elements
+    double* elem; // pointer to elements
+};
+```
+
+
+* define like `Vector v;`
+* use `.` notation to access `struct` members through a name
+* however, don't reinvent standard library components, use them
+
+#### Classes
+* provides a tighter connection between the representation and operations of a type
+* classes have members, can be data, functions, or type members
+
+```C++
+class Vector {
+public:
+    Vector(int s) : elem{new double[s]}, sz{s} {} // construct vector
+    double& operator[](int i) { return elem[i]; }
+    int size() { return sz; }
+private:
+    double* elem;
+    int sz;
+};
+```
+
+* define like `Vector v(6);`
+* essentially, Vector is a fixed-size 'handle' for holding a variable sized amount of data
+* data being allocated on the free store by `new`
+* the constructor for the class is a function with the same name as the `class`
+* at this point, missing error handling and destructors
+
+
+* a `struct` is simply a `class` with public members be default
+* can define constructors and member functions for a `struct`
+
+#### Unions
+
+* a `union` is a `struct` in which all members are allocated at the same address, so the union only has to hold as much space as its largest member
+* can hold only one member at a time
+* example:
+
+
+```C++
+struct Entry {
+    char* name;
+    char* s;    // use s for one purpose
+    int i;      // use i for an exclusive other purpose
+};
+```
+
+* recover wasted space by declaring a `union` of the values
+
+```C++
+union Value {
+    char* s;
+    int i;
+};
+```
+
+* now Entry looks like this:
+
+```C++
+struct Entry {
+    char* name;
+    Value v;
+};
+
+void f (Entry* p){
+    cout << p->v.s;
+}
+```
+
+* language does not keep track of which kind of value is held by a union, programmer must keep track
+* can encapsulate unions by a type field to guarantee access to initialized variables
+* called tagged unions
+
+#### Enumerations
+* used to represent small sets of integer values
+* `enum class Color { red, green, blue };`
+* `Color col = Color::red;`
+
+
+* `enum class` has only assignment, initialization, and comparisons (`<`, `==`)
+* however, an enumeration is a user-defined class, so we can define operations
+
+```C++
+Color& operator++(Color& c){
+    switch(t){
+    case Color::green:      return t=Color::yellow;
+    case Color::yellow:     return t=Color::red;
+    case Color::red:        return t=Color::green;
+    }
+}
+
+Color next = ++light;
+```
+
+* to avoid explicitly qualifying enumerator names, remove `class` from `enum class`
+* this will give you a plain enum, implicitly integers that start at 0
+
+```C++
+enum Color { red, green, blue };
+int col = green;
+```
+
+
+#### Advice
+* prefer `enum class`es over naked `enum`s to avoid surprises
+* define operations of enumerations for safe and simple use
