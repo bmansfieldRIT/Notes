@@ -259,3 +259,71 @@ int col = green;
 #### Advice
 * prefer `enum class`es over naked `enum`s to avoid surprises
 * define operations of enumerations for safe and simple use
+
+## Modularity
+
+* at the language level, C__ represents interfaces gy decalations
+* declarations specify all that's needed to use a type or function
+
+#### Separate Compilation
+
+* user code only sees declations of the types and functions used
+* minimizes compilation time, enforce separation of logically distinct parts of program
+* libraries are often collection of separately compiled code fragments
+
+* declarations are placed in headers files (Vector.h)
+* header files are included, to access that interface
+* implementations go in similarly named .cpp files (Vector.cpp), and must also include the interface file
+
+#### Namespaces
+
+* mechanism that expresses some declarations belong together, the names shouldn't clash with other names
+
+```C++
+namespace My_code{
+    class complex {
+        // ..
+    };
+    complex sqrt(complex);
+    // ..
+    int main();
+}
+
+int My_code::main(){
+    complex z{1, 2};
+    auto z2 = sqrt(z);
+    // more code
+}
+
+int main(){
+    return My_code::main();
+}
+```
+
+* by putting code in namespace `My_code`, ensures `complex` does not conflict with std
+* simplest way to access names in another namespace is to qualify (`My_code::main()`)
+* to gain access to names in the standard library space, use a `using` directive
+* `using namespace std;`
+* makes names accessible as if they were local to the scope with the directive in it
+* now can write `cout`, not `std::cout`
+
+* namespaces primarily used to organize larger program components, like libraries, to simplify composition
+
+
+#### Error Handling
+
+* major tool to combat errors is the type system itself
+* majority of C++ constructs are dedicated to the design of elegant and efficient abstractions
+* due to modularity and abstraction, point of error occurrence is separate from point where error is handled
+* need a good strategy for error handling, early in program development
+
+#### Exceptions
+* consider adding code to stop Vector from attempting to access out of range memory
+```C++
+double& Vector::operator[](int i){
+    if (i < 0 || size() <= i)
+        throw out_of_range{"Vector::operator[]"};
+    return elem[i];
+}
+
+```
