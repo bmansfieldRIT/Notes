@@ -325,5 +325,68 @@ double& Vector::operator[](int i){
         throw out_of_range{"Vector::operator[]"};
     return elem[i];
 }
-
 ```
+
+* a function that should never throw an exception can be declared `noexcept`
+
+
+#### Invariants
+
+* example: Vector must have 'resonable' values to perform operations that make any sense
+* such a statement of what is assumed to be true for a class is called a class invariant, or invariant
+* the constructor must do a better job checking for unreasonable values (`Vector(-27)` would cause chaos)
+
+* often, when a function has no way of completing its task after an exception is thrown, it must simply perform some local cleanup then rethrow the exception further up the chain
+* simply use the `throw` command
+
+* invariants are central to the design of classes, as well as preconditions in design of functions
+* invariants help us understand what we want
+* invariants force us to be specific
+
+
+#### Static Assertions
+
+* exceptions report errors at runtime, preferable to find errors at compile time
+* call these checks assertions, report failures as compiler error messages
+```C++
+static_assert(4 <= sizeof(int), "Integers too small"); // checks the size of an integer on current system
+```
+
+* can be used for anything that can be expressed in terms of constant expressions
+
+
+#### Advice
+
+* avoid using non-inline function definitions in headers
+* use namespaces to express logical structure
+* use `using` directives for foundation libraries (std), or within local scope
+* DON'T put `using` directive in a header file
+* develop an error handling strategy early in development
+* don't try to catch every exception in every function
+* let a constructor establish an invariant, throw if it cannot
+* design error handling strategies around invariants
+
+
+
+
+
+
+
+
+
+## History and Compatibility
+
+* Bjarne Stroustrup invented C++, wrote its early definitions and implementation
+* C++ was designed to provide Simula's facilities for programming organization w/ C's efficiency and flexibility for systems programming
+
+Timeline:
+* 1979 Work on C with Classes begins. Classes, public/private, constructors/destructors, function declaration with argument checking
+* 1984 Renamed to C++. Virtual functions, function/operator overloading, references, I/O stream, complex number libraries
+* 1985 First commercial release of C++. The C++ Programming Language book released
+* 1991 C++PL 2nd edition released. Generic programming using templates, exception based error handling, RAII (Resource Acquisition Is Initialization)
+* 1997 C++PL 3rd edition released. ISO C++, namespaces, dynamic_cast, refinement of templates
+* 2002 work on a revised standard, called C++0x, begins
+* 2009 C++0x feature complete. Uniform initialization, move semantics, variadic template arguments, lambda expressions, type aliases, memory model suitable fro concurrency, threads, locks.
+* 2011 ISO C++11 standard formally approved
+* 2012 work on future ISO C++ standards begin (C++14 and C++17)
+* 2013 first complete C++11 implementations emerge
