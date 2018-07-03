@@ -367,6 +367,30 @@ static_assert(4 <= sizeof(int), "Integers too small"); // checks the size of an 
 * design error handling strategies around invariants
 
 
+## Classes
+
+* classes support the programming styles of object-oriented programming and generic programming
+
+#### Concrete Types
+* essentially behave just as built in types
+* a concrete classes representation is part of its definition
+* this allows implementations to be optimally efficient in time and space
+* we can place concrete object on the stack, in statically allocated memory, refer to objects directly (not just through pointers or references), initialize objects immediately and completely (using constructors), and copy objects
+* if representation changes in any way, user must recompile (the cost of concrete objects)
+
+
+* operations in classes should be efficient, eg operators should be inlined without function calls in the generated machine code
+* functions in a class are inlined by default
+* can explicitly request inlining by using keyword `inline`
+
+
+* a constructor without arguments is a default constructor
+* eliminates possibility of uninitialized variable
+
+
+#### A Container
+
+*
 
 
 
@@ -390,3 +414,43 @@ Timeline:
 * 2011 ISO C++11 standard formally approved
 * 2012 work on future ISO C++ standards begin (C++14 and C++17)
 * 2013 first complete C++11 implementations emerge
+
+
+
+# Move Semantics - Linkedin Learning series
+* instead of copying objects, we can move a reference to another piece of data
+* lvalue reference - &x, traditional reference, can't be moved
+* rvalue reference - &&x, can be moved
+* `a = b`, where `a` is an lvalue, can be on the left side of the assignment OR the right, `b` is an rvalue, can appear only on the right side of an assignment
+* what is an rvalue?
+    - nameless value, xvalue, expiring value (such as the result of an expression)
+    - pure/prvalue , like a literal, anything returned from a function that is not a reference
+    - most importantly, it CAN be moved!
+* std::move is like a typecast
+
+* move constructors:
+    - `ExampleClass(ExampleClass &&) noexcept;`
+    - `noexcept` is a C++11 keyword essentially only useful in this situation. move semantics are faster than copy semantics, but if a constructor can `throw` then it loses strong exception safety. marking as `noexcept` allows us to utilize the `std::move_if_noexcept` (used by std::move itself?)
+    - responsibility is to ensure that the move operations marked `noexcept` really do not throw.
+    - marking an operation `noexcept` says that an operation will either complete successfully, or terminate the program
+
+* move assignment Operators:
+    - `ExampleClass & operator= (const ExampleClass &&) noexcept;`
+    - doing something like `a = sd::move(b)` would still be a copy unless a move assignment is defined, as above (assuming both are of type ExampleClass)
+
+* important to always leave moved object in a reasonable/empty state!!!
+
+* the copy and swap idiom
+    - use a class' copy and swap functions to improve efficiency
+    - the `operator=` function calls a swap() method that simply uses std::swap
+    - then the passed in value is destroyed when `operator=` goes out of scope
+    - can be optimized by compiler, easy, efficient
+
+* defining constructor, copy constructor, copy assignment:
+    - compiler automatically generates all three
+    - but if you need to define one of them, you likely need to define them all
+* Rule of Five:
+    - destructor, copy constructor, move constructor, copy assignment, move assignment
+    - using copy-and-swap idiom (assignment), then compiler still generates both assignment functions
+
+* CANNOT move const qualified object, it will be copied
