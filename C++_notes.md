@@ -393,7 +393,41 @@ static_assert(4 <= sizeof(int), "Integers too small"); // checks the size of an 
 *
 
 
+## Library Overview
+* standard lib is almost 2/3 of ISO C++ standard
 
+#### classficiation of facilities:
+* run time language support (allocation, runtime type info)
+* C standard library
+* Strings (including int'l char sets and localization)
+* support for regular expression matching
+* I/O streams, users can add own types, streams, buffering strategies, locales, char sets
+* framework of containers (vector, map) and algorithsm (find(), sort(), merge()), users can add own containers/algorithms
+* support for numerical computation (std math functions, complex nums, vectors with operations, random num generators)
+* concurrent programming support (threads, locks)
+* template metaprogramming support (type traits), stl-style generic programming(pair) and general programming(clock)
+* smart pointers for resource management (unique_ptr, shared_ptr)
+* interface to garbage collectors
+* special purpose containers (array, bitset, tuple)
+
+#### main criteria for a standard lib component:
+* helpful to almost all C++ users
+* provided in general form with little overhead
+* simple uses should be easy to learn
+
+#### Standard library Headers and namespace
+* `#include<string>`
+* standard lib is defined in namespace `std`
+* `std::string s {"This is a string"};`
+* `using namespace std;`
+* generally in poor taste to dump every name froma  namespace into local namespace
+
+
+#### advice:
+* when possible, prefer standard lib over other libraries
+* do not think standard library is idead for everything
+* remember to include headers
+* remember standard library features are defined in namespace std
 
 
 
